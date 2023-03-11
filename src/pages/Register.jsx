@@ -1,28 +1,50 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import {Link} from 'react-router-dom'
 import Logo from '../assets/logo.svg'
+import {ToastContainer, toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 function Register() {
   const [values, setValues] = useState({
     username: "",
     password: "",
-    confirmPassword: "",
+    confirmpassword: "",
     email: ""
-
   });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert('form');
+    if(handleValidation()) {
+      alert('form');
+    }
+    
   }
 
+
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 8000,
+    draggable: true,
+    // pauseOnHover: true,
+    theme: "dark",
+  };
+
   const handleValidation = () => {
-    
+    const {username, password, confirmpassword} = values;
+    if (password !== confirmpassword) {
+        // console.log("iam validation", toast);
+        toast.error('Your password is mismatched', toastOptions);
+        return false;
+    }
+    if (username.length < 3 ) {
+      toast.error("Your username should be greater than 3 chars", toastOptions);
+      return false;
+    }
+    return true;
   }
   
   const handleChange = (event) => {
-    // event.pre
     setValues({...values, [event.target.name]: event.target.value})
   }
 
@@ -62,6 +84,7 @@ function Register() {
           <span>Already have an account ? <Link to="/login">Login</Link></span>
         </form>
       </FormContainer>
+      <ToastContainer/>
     </>
   )
 }
